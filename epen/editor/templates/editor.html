@@ -10,6 +10,7 @@
     <!--Import materialize.css-->
     <link rel="stylesheet" href="../static/css/bootstrap.min.css" crossorigin="anonymous">
     <link rel="stylesheet" href="../static/css/jquery.minicolors.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="../static/css/editor_custom.css" crossorigin="anonymous">
 
     <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -25,7 +26,6 @@
 
 </head>
     <body>
-
         <nav class="navbar navbar-dark bg-primary fixed-top">
             <a class="navbar-brand" href="#">
                 <i class="d-inline-block align-top material-icons">edit</i>
@@ -48,16 +48,12 @@
                         </span>
                     </a>
                 <a id="ipen_text" class="navbar-brand" data-toggle="tooltip" data-placement="top" title="Text" style="display:none">
-                        <i class="Tiny material-icons" onclick="ePen.prototype._text_click_event()">text_format</i>
-                    </a>
-                <a id="ipen_color" class="navbar-brand" data-toggle="tooltip" data-placement="top" title="Color" style="display:none;">
-                    <input type="color" id="coloPricker" onchange="ePen.prototype._changecolor_event()"
-                           class="minicolors-input" data-control="hue" value="#000000" size="70">
+                    <i class="Tiny material-icons" onclick="ePen.prototype._text_click_event()">text_format</i>
                 </a>
                 <a id="ipen_save" class="navbar-brand" style="display:none">
                     <i class="d-inline-block align-top material-icons" data-placement="top" title="Save">save</i>
                 </a>
-                <a id="ipen_cloud_download" class="navbar-brand" style="display:none" onclick="ePen.prototype._submmit_details()">
+                <a id="ipen_cloud_download" class="navbar-brand" style="display:none" onclick="ePen.prototype._submit_details()">
                     <i class="d-inline-block align-top material-icons" data-placement="top" title="Download">cloud_download</i>
                 </a>
             </form>
@@ -68,6 +64,20 @@
         <div class="row justify-content-start">
             <div class="col-2"></div>
             <div class="col-10" id="container"></div>
+        </div>
+
+        <div id="ipen_color">
+          <div onclick="ePen.prototype._changecolor_event('#007bff')"> <i class="ss_animate"></i> </div>
+          <div onclick="ePen.prototype._changecolor_event('#ff0000')"> <i class="ss_animate"></i> </div>
+          <div onclick="ePen.prototype._changecolor_event('#ffff00')"> <i class="ss_animate"></i> </div>
+          <div onclick="ePen.prototype._changecolor_event('#66ff33')"> <i class="ss_animate"></i> </div>
+          <div onclick="ePen.prototype._changecolor_event('#ff3399')"> <i class="ss_animate"></i> </div>
+          <div onclick="ePen.prototype._changecolor_event('#663300')"> <i class="ss_animate"></i> </div>
+          <div class="menu">
+            <div class='share' id='ss_toggle' data-rot='180'>
+              <div class='material-icons'>color_lens</div>
+            </div>
+          </div>
         </div>
 
         <script  type="text/javascript" src="../static/js/popper.min.js"></script>

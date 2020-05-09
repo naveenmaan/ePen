@@ -38,11 +38,19 @@ def createPdf(pageNumber, actions, pagesize):
         if key ==  "text":
             for actionRow in value:
                 textobject = can.beginText()
-                textobject.setTextOrigin(actionRow['axis'][0]*scale, float(pagesize[1])-actionRow['axis'][1]*scale)
-                textobject.setFont('Times-Roman', 30)
-                textobject.textLine(text=actionRow['comment'])
-                textobject.setFillColor(colors.black)
-                can.drawText(textobject)
+                box_text_strength = (actionRow['end'][0] -actionRow['start'][0]) // (actionRow['textSize'] / 2.5);
+                n = 0;
+                while n*box_text_strength < len(actionRow['comment']):
+                    comment = actionRow['comment'][int(n * box_text_strength): int((n + 1) * box_text_strength)]
+                    #textobject.setTextOrigin(actionRow['start'][0]*scale, float(pagesize[1])-(actionRow['start'][1]*0.709999))
+                    textobject.setTextOrigin(actionRow['start'][0]*scale,
+                                             float(pagesize[1])-(actionRow['start'][1]+(n+1)*actionRow['textSize'])*scale)
+                    textobject.setFont('Times-Roman', actionRow['textSize']*scale)
+                    textobject.textLine(text=comment)
+                    textobject.setFillColor(colors.black)
+                    can.drawText(textobject)
+
+                    n+=1
 
     can.showPage()
     can.save()
