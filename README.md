@@ -1,6 +1,6 @@
 # ePen
 
-A web pdf editing tool. This tool allows users to deliberately draw lines, boxes, or add texts on the top of the current pdf. This tool enables users to use varieties of files like pdf, doc, images. But the outcome will be the pdf. When a user uploads a file to update using various python library system converts the file to the pdf and allow the user to draw on the top of the pdf file.
+A web pdf editing tool. This tool allows users to deliberately draw lines, boxes, or add texts on the top of the pdf. This tool enables users to use varieties of files like pdf, doc, images. But the outcome will be the pdf. When a user uploads a file to update using various python library system converts the file to the pdf and allow the user to draw on the top of the pdf file.
 
 # Technologies Used
 - Python
