@@ -16,6 +16,7 @@
 
 
     <script  type="text/javascript" src="../static/js/jquery.min.js"></script>
+    <script  type="text/javascript" src="../static/pdf.js"></script>
 
 
 </head>
@@ -28,60 +29,23 @@
             </a>
         </nav>
 
-        <section>
-            <div class="container p-5">
-                <div class="row">
-                    <div class="col-lg-5 mx-auto">
-                        <div class="p-5 bg-white shadow rounded-lg">
-
-                            <img src="../static/images/img_epm3iz.png" alt="" width="200" class="d-block mx-auto mb-4 rounded-pill">
-
-                            <h6 class="text-center mb-4 text-muted">
-                                Select a file to upload.
-                            </h6>
-
-                            <form method="post" action="" enctype="multipart/form-data" id="uploadForm">
-
-                                <div class="custom-file overflow-hidden rounded-pill mb-5 ">
-                                    <input id="uploadFile" name="uploadFile" type="file" class="custom-file-input rounded-pill">
-                                    <label for="uploadFile" class="custom-file-label rounded-pill">Choose file</label>
-                                </div>
-
-                                <button type="button" class="btn btn-primary btn-block rounded-pill shadow" onclick="upload_action()">
-                                    Upload
-                                </button>
-                            </form>
-
-                        </div>
+        <div class="container mt-5">
+            <div class="row ml-5 pl-5">
+                <div class="col-md-1.5 mt-4 mr-5 btn" onclick="javascript:window.location.href='./upload'">
+                    <div class="card">
+                        <img src="../static/images/docs-blank-googlecolors.png"
+                             width="120px" alt="Upload new file" class="img-thumbnail">
+                    </div>
+                    <div class="d-inline-block text-truncate" style="max-width: 120px;">
+                        Blank
                     </div>
                 </div>
             </div>
-        </section>
-
-        <div class="modal fade" id="uploadModalCenter" tabindex="-1" role="dialog"
-             aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">
-                            Please Wait
-                        </h5>
-                    </div>
-                    <div class="modal-body center-block">
-                        <div class="progress">
-                            <div class="progress-bar progress-bar-striped bg-danger" role="progressbar"
-                                 style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                    </div>
-                    <div class="modal-footer"></div>
-                </div>
+            <div class="row ml-5 pl-5" id="stored_documents">
             </div>
         </div>
 
-
-
-
         <script src="../static/js/bootstrap.min.js" ></script>
-        <script src="../static/js/custom.js" ></script>
+        <script src="../static/js/index.js" ></script>
     </body>
 </html>

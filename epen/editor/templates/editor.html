@@ -27,7 +27,7 @@
 </head>
     <body>
         <nav class="navbar navbar-dark bg-primary fixed-top">
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="/">
                 <i class="d-inline-block align-top material-icons">edit</i>
                 ePen
             </a>
@@ -50,7 +50,7 @@
                 <a id="ipen_text" class="navbar-brand" data-toggle="tooltip" data-placement="top" title="Text" style="display:none">
                     <i class="Tiny material-icons" onclick="ePen.prototype._text_click_event()">text_format</i>
                 </a>
-                <a id="ipen_save" class="navbar-brand" style="display:none">
+                <a id="ipen_save" class="navbar-brand" style="display:none" onclick="ePen.prototype._save_details()">
                     <i class="d-inline-block align-top material-icons" data-placement="top" title="Save">save</i>
                 </a>
                 <a id="ipen_cloud_download" class="navbar-brand" style="display:none" onclick="ePen.prototype._submit_details()">

@@ -42,12 +42,13 @@ var ePen = (function ePenClosure(){
         this._eraser = option._eraser || false,
         this._text = option._text || false,
         this._color = option._color || false,
+        this._save = option._save || false,
         this.colorSelected = option.colorSelected || '#000000',
         this._cloud_download = option._cloud_download || false,
         this._scale = 1.5,
-        this.pencilHistory = [],
-        this.rectangleHistory = [],
-        this.textHistory = [],
+        this.pencilHistory = option.pencilHistory || [],
+        this.rectangleHistory = option.rectangleHistory || [],
+        this.textHistory = option.textHistory || [],
         this.drawOption = null,
         this.eraser_shape = 8,
         this.isMouseDown = option.isMouseDown || false,
@@ -104,13 +105,14 @@ var ePen = (function ePenClosure(){
     ePen.prototype = {
         _load_pdf : function() {
             //pdfjsLib.getDocument(url)
-            pdfjsLib.getDocument({data: atob(url),}).then(function(pdf){
+            pdfjsLib.getDocument({data: atob(url),}).then(async function(pdf){
                 // Get div#container and cache it for later use
                 var container = document.getElementById("container");
                 // Loop from 1 to total_number_of_pages in PDF document
+
                 for (var i = 1; i <= pdf.numPages; i++) {
                     // Get desired page
-                    pdf.getPage(i).then(function(page) {
+                    await pdf.getPage(i).then(function(page) {
                         var viewport = page.getViewport(this._scale);
                         var div = document.createElement("div");
 
@@ -190,6 +192,8 @@ var ePen = (function ePenClosure(){
                          });
 
                     });
+
+                    ePen.prototype._redraw_shapes(i);
                 }
             });
         },
@@ -198,22 +202,25 @@ var ePen = (function ePenClosure(){
             //get the toolbar container
             var toolbox_container = document.getElementById("nav-mobile");
             if(_pencil){
-                $("#ipen_pencil").show()
+                $("#ipen_pencil").show();
             }
             if(_rectangle){
-                $("#ipen_rectangle").show()
+                $("#ipen_rectangle").show();
             }
             if(_eraser){
-                $("#ipen_eraser").show()
+                $("#ipen_eraser").show();
             }
             if(_text){
-                $("#ipen_text").show()
+                $("#ipen_text").show();
             }
             if(_color){
-                $("#ipen_color").show()
+                $("#ipen_color").show();
             }
             if(_cloud_download){
-                $("#ipen_cloud_download").show()
+                $("#ipen_cloud_download").show();
+            }
+            if(_save) {
+                $("#ipen_save").show();
             }
         },
         drawCanvasMouseHoverEvent : function(event, page_number){
@@ -470,11 +477,6 @@ var ePen = (function ePenClosure(){
                                             && event.offsetY-y_sub < (m* (event.offsetX-x_sub) + (b+eraser_shape))
                                             && (event.offsetX-x_sub) + eraser_shape >= t[0]
                                             && a['track'][index+1][0] >= (event.offsetX-x_sub)-eraser_shape;
-
-//                                    return (event.offsetX >= t[0]
-//                                            && a['track'][index+1][0] >= event.offsetX)
-//                                            && (event.offsetY-eraser_shape <= t[1]
-//                                            && a['track'][index+1][1] <= event.offsetY+eraser_shape )
                                 }else{
                                     return (event.offsetX-eraser_shape <= t[0] && t[0] <= event.offsetX+eraser_shape)
                                                      && (event.offsetY-eraser_shape <= t[1] &&
@@ -669,6 +671,25 @@ var ePen = (function ePenClosure(){
 
 
         },
+        //save the details
+        _save_details: function() {
+            $.ajax({
+                url : "/saveDetails/",
+                type: "POST",
+                data: {"fileID": $.urlParam('id'),
+                    'action' : JSON.stringify({"pencil": pencilHistory, "rectangle": rectangleHistory, "text": textHistory})},
+                success: function(response) {
+                    if("error" in response) {
+                        alert(response['error']);
+                    }else{
+                        console.log(response)
+                    }
+                },
+                error: function(response) {
+                    alert("500 Error while saving the changes.");
+                }
+            });
+        },
         //color change event
         _changecolor_event: function(color_hex) {
             colorSelected = color_hex;
@@ -696,10 +717,14 @@ $( document ).ready(function() {
                     _text: true,
                     _color: true,
                     _cloud_download: true,
+                    _save: true,
+                    pencilHistory: response['action']['pencil'],
+                    rectangleHistory: response['action']['rectangle'],
+                    textHistory: response['action']['text'],
                     fileID: $.urlParam('id')
                 });
 
-                ePen.prototype._load_pdf()
+                ePen.prototype._load_pdf();
                 ePen.prototype._load_toolbox();
             }
         }

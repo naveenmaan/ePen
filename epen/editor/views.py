@@ -9,18 +9,37 @@ from .models import *
 
 # Create your views here.
 def index(request):
-	return render(request, "index.html", {})
+	return render(request, "index.html")
 
+def upload(request):
+	return render(request, "upload.html", {})
+
+def get_stored_document(request):
+	document_data = getStoredDocumentFromDB()
+
+	return JsonResponse({"document_data": document_data})
+	return JsonResponse(json.dumps({"document_data": document_data}))
 
 def getFile(request):
 	fileID=request.POST.get('fileID')
 
-	file = getPDF(fileID)
+	file, changes = getPDF(fileID)
 
 	if file == None:
 		return JsonResponse({"error": "Invalid file"})
 
-	return JsonResponse({"fileData": file.decode("utf-8") })
+	return JsonResponse({"fileData": file.decode("utf-8"), 'action': changes })
+
+def getImage(request):
+	fileID = request.GET.get('fileID')
+	file, changes = getPDF(fileID)
+	if file == None:
+		return JsonResponse({"error": "Invalid file"})
+
+	response = pdf2image(file, changes)
+
+	return JsonResponse({"fileData": response.decode("utf-8"), "_id": fileID})
+
 
 
 
@@ -54,9 +73,11 @@ def editor(request):
 	return render(request, "editor.html")
 
 def applyChanges(request):
-	fileData = request.POST.get('fileID')
+	fileID = request.POST.get('fileID')
 
-	fileData = getPDF(fileData)
+	fileData, _ = getPDF(fileID)
+
+	_ = storePDfChanges(fileID, json.loads(request.POST.get('action')))
 
 	response = applyEditing(fileData, json.loads(request.POST.get('action')))
 
@@ -65,4 +86,13 @@ def applyChanges(request):
 
 
 	return response
+
+def saveDetails(request):
+	fileData = request.POST.get('fileID')
+
+	action = json.loads(request.POST.get('action'))
+
+	insert_id = storePDfChanges(fileData, action)
+
+	return  JsonResponse({"id": insert_id})
 

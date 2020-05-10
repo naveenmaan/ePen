@@ -8,7 +8,6 @@ from reportlab.lib.pagesizes import letter
 import mammoth
 from xhtml2pdf import pisa
 import base64
-from decimal import Decimal
 
 
 
@@ -80,6 +79,38 @@ def image2pdf(file_data):
 
 
     return base64.b64encode(packet.getvalue())
+
+def pdf2image(pdf_bytes, actions):
+    decodedText = base64.b64decode(pdf_bytes)
+    pdfFileObj = BytesIO()
+    pdfFileObj.write(decodedText)
+    pdfReader = PdfFileReader(pdfFileObj)
+    page = pdfReader.getPage(0)
+
+    height = pdfReader.getPage(0).mediaBox.getHeight()
+    width = pdfReader.getPage(0).mediaBox.getWidth()
+    action_filter = {}
+    # filtering the result
+    for key, value in actions.items():
+        action_filter[key] = []
+        for actionRow in value:
+            if actionRow['pageNumber'] == 1:
+                action_filter[key].append(actionRow)
+
+    actionedPage = createPdf(pdfReader.numPages, action_filter, (width, height))
+    page.mergePage(actionedPage.getPage(0))
+
+    page.scaleTo(120, 150)
+
+    output = PdfFileWriter()
+    output.addPage(page)
+
+    response = BytesIO()
+    output.write(response)
+    response.seek(0)
+
+    return base64.b64encode(response.read())
+
 
 def convert_image(image):
 	with image.open() as image_bytes:

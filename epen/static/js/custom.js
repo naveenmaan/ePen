@@ -14,7 +14,7 @@ function upload_action(){
     $("#uploadModalCenter").show();
 
     $.ajax({
-        url: "uploadFile/",
+        url: "/uploadFile/",
         type: "POST",
         data: new FormData($('#uploadForm')[0]),
         processData: false,
@@ -23,7 +23,7 @@ function upload_action(){
         if ('error' in response){
             alert(response['error']);
         }else{
-            var url = "editor/?id=" + response['id'] + "&filename=" + response['filename'];
+            var url = "/editor/?id=" + response['id'] + "&filename=" + response['filename'];
             window.location.replace(url);
         }
     }).fail(function(){
